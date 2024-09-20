@@ -13,13 +13,13 @@
             background-color: #f8f8f8;
         }
 
-        .header {
+        header {
             background-color: #f5c7d4;
             padding: 20px;
             text-align: center;
         }
 
-        .header img {
+        header img {
             width: 150px;
         }
 
@@ -37,7 +37,9 @@
         }
 
         .banner {
+            background-image: url('./images/flowers_banner.jpg');
             background-size: cover;
+            background-position: center;
             text-align: center;
             color: white;
             padding: 100px 0;
@@ -48,17 +50,7 @@
             font-size: 36px;
         }
 
-        .banner {
-            background-image: url('./images/flowers_banner.jpg');
-            background-size: cover;
-            background-position: center;
-            text-align: center;
-            color: white;
-            padding: 100px 0;
-            position: relative;
-        }
-
-        .product-section {
+        main {
             text-align: center;
             padding: 50px 0;
         }
@@ -92,7 +84,7 @@
             margin: 10px 0;
         }
 
-        .footer {
+        footer {
             background-color: #ffc0cb;
             text-align: center;
             padding: 20px;
@@ -103,60 +95,61 @@
 
 <body>
 
-    <div class="header">
+    <header>
         <a href="index.html">Blossom & Bloom by Sasha</a>
         <p>+38 (097) 620 43 61</p>
-    </div>
+    </header>
 
-    <div class="navbar">
+    <nav class="navbar">
         <a href="#">Букети</a>
         <a href="#">Троянди</a>
         <a href="#">Весільні букети</a>
         <a href="#">Кімнатні рослини</a>
         <a href="#">Акції</a>
-    </div>
+    </nav>
 
-    <div class="banner">
-
+    <section class="banner">
         <h1>Завжди в наявності більше ніж 100 готових букетів для Вас!</h1>
         <a href="#">Перегляньте каталог</a>
-    </div>
+    </section>
 
-    <div class="product-section">
-        <h2>Спеціальні пропозиції</h2>
-        <div class="product-list">
-            <div class="product-item">
-                <img src="bouquet1.jpg" alt="Мінібукет">
-                <p>1600 грн</p>
-                <p>Мінібукет</p>
+    <main>
+        <section class="product-section">
+            <h2>Спеціальні пропозиції</h2>
+            <div class="product-list">
+                <div class="product-item">
+                    <img src="bouquet1.jpg" alt="Мінібукет">
+                    <p>1600 грн</p>
+                    <p>Мінібукет</p>
+                </div>
+                <div class="product-item">
+                    <img src="bouquet2.jpg" alt="Ірис">
+                    <p>99 грн</p>
+                    <p>Ірис</p>
+                </div>
+                <div class="product-item">
+                    <img src="bouquet3.jpg" alt="Троянда Freedom">
+                    <p>5900 грн</p>
+                    <p>Троянда Freedom 51 шт.</p>
+                </div>
+                <div class="product-item">
+                    <img src="bouquet4.jpg" alt="Мінібукет">
+                    <p>1200 грн</p>
+                    <p>Мінібукет</p>
+                </div>
+                <div class="product-item">
+                    <img src="bouquet5.jpg" alt="Троянда Тея">
+                    <p>1500 грн</p>
+                    <p>Троянда Тея 51 шт.</p>
+                </div>
             </div>
-            <div class="product-item">
-                <img src="bouquet2.jpg" alt="Ірис">
-                <p>99 грн</p>
-                <p>Ірис</p>
-            </div>
-            <div class="product-item">
-                <img src="bouquet3.jpg" alt="Троянда Freedom">
-                <p>5900 грн</p>
-                <p>Троянда Freedom 51 шт.</p>
-            </div>
-            <div class="product-item">
-                <img src="bouquet4.jpg" alt="Мінібукет">
-                <p>1200 грн</p>
-                <p>Мінібукет</p>
-            </div>
-            <div class="product-item">
-                <img src="bouquet5.jpg" alt="Троянда Тея">
-                <p>1500 грн</p>
-                <p>Троянда Тея 51 шт.</p>
-            </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
-    <div class="footer">
+    <footer>
         <p>Blossom & Bloom by Sasha</p>
         <p>+38 (097) 620 43 61</p>
-    </div>
+    </footer>
 
 </body>
 
