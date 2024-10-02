@@ -4,124 +4,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blossom & Bloom by Sasha</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f8f8;
-        }
-
-        header {
-            background-color: #f5c7d4;
-            padding: 20px;
-        }
-
-        header img {
-            width: 150px;
-        }
-
-        .navbar {
-            background-color: #ffc0cb;
-        }
-
-        .navbar a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: #000;
-        }
-
-        .banner {
-            background-image: url('./images/flowers_banner.jpg');
-            background-position: center;
-            color: white;
-            padding: 100px 0;
-        }
-
-        main {
-            text-align: center;
-            padding: 50px 0;
-        }
-
-        .product-section h2 {
-            font-size: 24px;
-            margin-bottom: 30px;
-        }
-
-        .product-item img {
-            width: 100%;
-            height: auto;
-        }
-
-        .product-item p {
-            margin: 10px 0;
-        }
-
-        footer {
-            background-color: #ffc0cb;
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>FLORAL & BLOSSOM - доставка квітів у Дніпрі</title>
 </head>
 
 <body>
 
 <header>
-        <a href="index.html">Blossom & Bloom by Sasha</a>
-        <p>+38 (097) 620 43 61</p>
-    <nav class="navbar">
-        <a href="#">Букети</a>
-        <a href="#">Троянди</a>
-        <a href="#">Весільні букети</a>
-        <a href="#">Кімнатні рослини</a>
-        <a href="#">Акції</a>
+    <div class="header-container">
+        <div class="logo-header">
+            <img src="./images/logo.png" alt="Floral Blossom Logo">
+        </div>
+        <div class="contact-info">
+            <a href="tel:+380976204361"> <i class="fas fa-phone"></i>(097) 620 43 61</a>
+            <span class="working-hours"> <i class="fa-regular fa-clock"></i> Чекаємо на вас з 7:00 по 22:00</span>
+        </div>
+        <div class="cart">
+            <span class="cart-icon"><i class="fas fa-shopping-cart"></i> 0 грн</span>
+        </div>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#">БУКЕТИ</a></li>
+            <li><a href="#">ТРОЯНДИ</a></li>
+            <li><a href="#">ВЕСІЛЬНІ БУКЕТИ</a></li>
+            <li><a href="#">КІМНАТНІ РОСЛИНИ</a></li>
+            <li><a href="#">ПРИВІД</a></li>
+            <li><a href="#">АКЦІЇ</a></li>
+        </ul>
     </nav>
 </header>
-    
 
     <main>
-        <section class="banner">
-        <h1>Завжди в наявності більше ніж 100 готових букетів для Вас!</h1>
-        <a href="#">Перегляньте каталог</a>
-        </section>
-        <section class="product-section">
-            <h2>Спеціальні пропозиції</h2>
-            <div class="product-list">
-                <div class="product-item">
-                    <img src="bouquet1.jpg" alt="Мінібукет">
-                    <p>1600 грн</p>
-                    <p>Мінібукет</p>
-                </div>
-                <div class="product-item">
-                    <img src="bouquet2.jpg" alt="Ірис">
-                    <p>99 грн</p>
-                    <p>Ірис</p>
-                </div>
-                <div class="product-item">
-                    <img src="bouquet3.jpg" alt="Троянда Freedom">
-                    <p>5900 грн</p>
-                    <p>Троянда Freedom 51 шт.</p>
-                </div>
-                <div class="product-item">
-                    <img src="bouquet4.jpg" alt="Мінібукет">
-                    <p>1200 грн</p>
-                    <p>Мінібукет</p>
-                </div>
-                <div class="product-item">
-                    <img src="bouquet5.jpg" alt="Троянда Тея">
-                    <p>1500 грн</p>
-                    <p>Троянда Тея 51 шт.</p>
+        <section class="promo-section">
+            <div class="promo-background">
+                <div class="promo-content">
+                    <p>Завжди в наявності більше ніж 100 готових букетів для Вас!</p>
+                    <a href="#">Перейти в каталог ></a>
                 </div>
             </div>
         </section>
+        <section class="filter-section">
+            <h2>ДОСТАВКА КВІТІВ У ДНІПРІ</h2>
+            <div class="filters">
+                <div class="filter">
+                    <select id="price-filter">
+                        <option value="all">Вартість</option>
+                        <option value="low">До 1000 грн</option>
+                        <option value="medium">1000 - 3000 грн</option>
+                        <option value="high">Більше 3000 грн</option>
+                    </select>
+                </div>
+                <div class="filter">
+                    <select id="occasion-filter">
+                        <option value="all">Привід</option>
+                        <option value="birthday">День народження</option>
+                        <option value="wedding">Весілля</option>
+                        <option value="valentines">День Святого Валентина</option>
+                    </select>
+                </div>
+                <div class="filter">
+                    <select id="recipient-filter">
+                        <option value="all">Кому</option>
+                        <option value="girlfriend">Дівчині</option>
+                        <option value="mom">Мамі</option>
+                        <option value="colleague">Колезі</option>
+                    </select>
+                </div>
+                <div class="filter">
+                    <select id="flower-filter">
+                        <option value="all">Квіти</option>
+                        <option value="roses">Троянди</option>
+                        <option value="lilies">Лілії</option>
+                        <option value="orchids">Орхідеї</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+        
+        <section class="special-offers">
+            <h3>СПЕЦІАЛЬНІ ПРОПОЗИЦІЇ</h3>
+            <div class="product-grid">
+                <div class="product">
+                    <img src="./images/bouquet_1.png" alt="Малий букет">
+                    <p class="name">Малий букет</p>
+                    <p class="price">1 600 грн</p>
+                </div>
+                <div class="product">
+                    <img src="/images/bouquet_2.png" alt="Нобіліс">
+                    <p class="name">Нобіліс</p>
+                    <p class="price">99 грн</p>
+                </div>
+                <div class="product">
+                    <img src="/images/bouquet_3.png" alt="Троянда Freedom 51 шт.">                   
+                    <p class="name">Троянда Freedom 51 шт.</p>
+                    <p class="price">5 900 грн</p>
+                </div>
+                <div class="product">
+                    <img src="./images/bouquet_4.png" alt="Малий букет">                   
+                    <p class="name">Малий букет</p>
+                    <p class="price">1 200 грн</p>
+                </div>
+            </div>
+        </section>
+        <section class="about-us">
+            <div class="container">
+               <h1> <strong class="str_color">«FLORAL & BLOSSOM» </strong> — КВІТКОВА БАЗА І МЕРЕЖА МАГАЗИНІВ У ДНІПРІ</h1>
+                <p class="au_1">Готуєтесь до свята? Мрієте зробити приємний сюрприз близькій людині? Любите квіти і із задоволенням даруєте їх
+                    людям? Інтернет-магазин квітів "FLORAL & BLOSSOM" стане для вас справжнім помічником.</p>
+        
+                <div class="aboutus-section">
+                    <div class="image-text-block1">
+                        <img src="./images/girl_1.png" alt="Дівчина з квітами">
+                        <div class="par-block1">
+                            <p>Ми маємо багатий вибір квіткових композицій</p> <br>
+                            <p>У нашому каталозі ви знайдете розкішний асортимент оригінальних букетів, що вражають своєю красою та витонченістю. 
+                            Пропонуємо вам вишукані весільні композиції, квіти для жінок, які цінують елегантність у кожній деталі, а також розкішні 
+                            кошики та скромні, але стильні букети. Кожна наша пропозиція — це маленьке чудо флористичного мистецтва, яке створить 
+                            особливу атмосферу та залишить незабутні враження.</p>
+                        </div>
+                    </div>
+                    <div class="image-text-block2">
+                        <img src="./images/girl_2.png" alt="Дівчина в квітковому магазині">
+                        <div class="par-block2">
+                            <p>Квіти з доставкою в Дніпрі</p> <br>
+                            <p> <strong class="str_color"> «FLORAL & BLOSSOM»</strong> — мережа з 10 квіткових магазинів, розташованих у різних районах Дніпра, 
+                                тому доставка букетів проводиться кур'єрами в мінімальні терміни. <br> <br>
+                                Є безліч приводів подарувати квіти близьким: весілля, день народження, ювілей, професійне свято або 8 березня. Проте для
+                                того, щоб зробити приємне, не завжди потрібна особлива нагода. Найбільш цінними є несподівані сюрпризи, які викликають
+                                щиру радість і теплі емоції! Чому б не створити такий момент прямо зараз? Ознайомтеся з нашим широким асортиментом, де
+                                кожен букет створений для того, щоб дарувати радість та підкреслювати важливість ваших стосунків. Обирайте найкращі
+                                квіти для найдорожчих людей та робіть їх день незабутнім!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <footer>
-        <p>Blossom & Bloom by Sasha</p>
-        <p>+38 (097) 620 43 61</p>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="/images/logo.png" alt="Floral Blossom Logo">
+            </div>
+            <div class="footer-contact">
+                <a href="tel:+380976204361"> <i class="fas fa-phone"></i>(097) 620 43 61</a>
+                <a href="https://www.google.com/maps/place/Dnipro" target="_blank">Де ми знаходимось?</a>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <a href="#">Каталог</a>
+                    <a href="#">Про нас</a>
+                    <a href="#">Доставка</a>
+                    <a href="#">Контакти</a>
+                </div>
+                <div class="footer-column">
+                    <a href="#">Букети</a>
+                    <a href="#">Троянди</a>
+                    <a href="#">Весільні букети</a>
+                    <a href="#">Кімнатні рослини</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
 </body>
