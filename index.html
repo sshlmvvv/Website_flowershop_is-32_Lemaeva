@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mansalva&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>FLORAL & BLOSSOM - доставка квітів у Дніпрі</title>
 </head>
@@ -14,9 +18,7 @@
 
 <header>
     <div class="header-container">
-        <div class="logo-header">
-            <img src="./images/logo.png" alt="Floral Blossom Logo">
-        </div>
+        <div class="logo-header"><a href="./index.html">FLORAL & BLOSSOM</a></div>
         <div class="contact-info">
             <a href="tel:+380976204361"> <i class="fas fa-phone"></i>(097) 620 43 61</a>
             <span class="working-hours"> <i class="fa-regular fa-clock"></i> Чекаємо на вас з 7:00 по 22:00</span>
@@ -27,12 +29,13 @@
     </div>
     <nav>
         <ul>
+            <li><a href="#">ВСІ</a></li>
             <li><a href="#">БУКЕТИ</a></li>
             <li><a href="#">ТРОЯНДИ</a></li>
             <li><a href="#">ВЕСІЛЬНІ БУКЕТИ</a></li>
             <li><a href="#">КІМНАТНІ РОСЛИНИ</a></li>
-            <li><a href="#">ПРИВІД</a></li>
-            <li><a href="#">АКЦІЇ</a></li>
+            <li><a href="#">ДОСТАВКА</a></li>
+            <li><a href="#">ПРО НАС</a></li>
         </ul>
     </nav>
 </header>
@@ -41,7 +44,7 @@
         <section class="promo-section">
             <div class="promo-background">
                 <div class="promo-content">
-                    <p>Завжди в наявності більше ніж 100 готових букетів для Вас!</p>
+                    <p>Завжди в наявності більше ніж <br>100 готових букетів для Вас!</p>
                     <a href="#">Перейти в каталог ></a>
                 </div>
             </div>
@@ -85,36 +88,82 @@
         </section>
         
         <section class="special-offers">
-            <h3>СПЕЦІАЛЬНІ ПРОПОЗИЦІЇ</h3>
-            <div class="product-grid">
-                <div class="product">
-                    <img src="./images/bouquet_1.png" alt="Малий букет">
-                    <p class="name">Малий букет</p>
-                    <p class="price">1 600 грн</p>
-                </div>
-                <div class="product">
-                    <img src="./images/bouquet_2.png" alt="Нобіліс">
-                    <p class="name">Нобіліс</p>
-                    <p class="price">99 грн</p>
-                </div>
-                <div class="product">
-                    <img src="./images/bouquet_3.png" alt="Троянда Freedom 51 шт.">                   
-                    <p class="name">Троянда Freedom 51 шт.</p>
-                    <p class="price">5 900 грн</p>
-                </div>
-                <div class="product">
-                    <img src="./images/bouquet_4.png" alt="Малий букет">                   
-                    <p class="name">Малий букет</p>
-                    <p class="price">1 200 грн</p>
-                </div>
+            <div class="main-container">
+                <h2 class="section-title">Спеціальні пропозиції</h2>
+            </div>
+            <div class="cards-container">
+                <a href="#" class="card-container">
+                    <img class="card-img" src="./images/bouquet_1.png" alt="Малий букет">
+                    <div class="card">
+                        <p class="card-name">Малий букет</p>
+                        <p class="card-descr">Чарівний малий букет, який додасть ніжності у ваше життя.</p>
+                        <p class="card-price">1 600 грн</p>
+                    </div>
+                </a>
+                <a href="#" class="card-container">
+                    <img class="card-img" src="./images/bouquet_2.png" alt="Нобіліс">
+                    <div class="card">
+                        <p class="card-name">Нобіліс</p>
+                        <p class="card-descr">Справжня класика для особливих моментів.</p>
+                        <p class="card-price">99 грн</p>
+                    </div>
+                </a>
+                <a href="#" class="card-container">
+                    <img class="card-img" src="./images/bouquet_3.png" alt="Троянда Freedom 51 шт.">
+                    <div class="card">
+                        <p class="card-name">Троянда Freedom 51 шт.</p>
+                        <p class="card-descr">Елегантні троянди, які завжди в моді.<br><br></p>
+                        <p class="card-price">5 900 грн</p>
+                    </div>
+                </a>
+                <a href="#" class="card-container">
+                    <img class="card-img" src="./images/bouquet_4.png" alt="Малий букет">
+                    <div class="card">
+                        <p class="card-name">Малий букет</p>
+                        <p class="card-descr">Прекрасне поєднання квітів для кожного свята.</p>
+                        <p class="card-price">1 200 грн</p>
+                    </div>
+                </a>
+                <a href="#" class="card-container">
+                    <img class="card-img" src="./images/bouquet_2.png" alt="Букет 'Ранкова роса'">
+                    <div class="card">
+                        <p class="card-name">Букет "Ранкова роса"</p>
+                        <p class="card-descr">Свіжий та ніжний букет із рожевих півоній та білих лілій, що нагадує світанок.</p>
+                        <p class="card-price">2 300 грн</p>
+                    </div>
+                </a>
+                <a href="#" class="card-container">
+                    <img class="card-img" src="./images/bouquet_3.png" alt="Букет 'Захід сонця'">
+                    <div class="card">
+                        <p class="card-name">Букет "Захід сонця"</p>
+                        <p class="card-descr">Насичені відтінки помаранчевих троянд і червоних гербер, що передають тепло вечора.</p>
+                        <p class="card-price">3 100 грн</p>
+                    </div>
+                </a>
+                <a href="#" class="card-container">
+                    <img class="card-img" src="./images/bouquet_4.png" alt="Букет 'Літній вітерець'">
+                    <div class="card">
+                        <p class="card-name">Букет "Літній вітерець"</p>
+                        <p class="card-descr">Повітряна композиція з білих ромашок та блакитних ірисів, що дарує свіжість літа.</p>
+                        <p class="card-price">1 800 грн</p>
+                    </div>
+                </a>
+                <a href="#" class="card-container">
+                    <img class="card-img" src="./images/bouquet_2.png" alt="Букет 'Ніжні почуття'">
+                    <div class="card">
+                        <p class="card-name">Букет "Ніжні почуття"</p>
+                        <p class="card-descr">Композиція з білих півоній і рожевих троянд, що символізує чисті почуття.<br></p>
+                        <p class="card-price">2 700 грн</p>
+                    </div>
+                </a>
             </div>
         </section>
+
         <section class="about-us">
             <div class="container">
-               <h1> <strong class="str_color">«FLORAL & BLOSSOM» </strong> — КВІТКОВА БАЗА І МЕРЕЖА МАГАЗИНІВ У ДНІПРІ</h1>
+               <h2> <strong class="str_color">«FLORAL & BLOSSOM» </strong> — КВІТКОВА БАЗА І МЕРЕЖА МАГАЗИНІВ У ДНІПРІ</h2>
                 <p class="au_1">Готуєтесь до свята? Мрієте зробити приємний сюрприз близькій людині? Любите квіти і із задоволенням даруєте їх
                     людям? Інтернет-магазин квітів "FLORAL & BLOSSOM" стане для вас справжнім помічником.</p>
-        
                 <div class="aboutus-section">
                     <div class="image-text-block1">
                         <img src="./images/girl_1.png" alt="Дівчина з квітами">
@@ -148,13 +197,25 @@
 
     <footer class="footer">
         <div class="footer-container">
-            <div class="footer-logo">
-                <img src="./images/logo.png" alt="Floral Blossom Logo">
-            </div>
+            <div class="logo-footer"><a href="./index.html">FLORAL & BLOSSOM</a></div>
             <div class="footer-contact">
-                <a href="tel:+380976204361"> <i class="fas fa-phone"></i>(097) 620 43 61</a>
-                <a href="https://www.google.com/maps/place/Dnipro" target="_blank">Де ми знаходимось?</a>
+                <div class="footer-contact1">
+                    <a href="tel:+380976204361"> <i class="fas fa-phone"></i>(097) 620 43 61</a>
+                    <a href="https://www.google.com/maps/place/Dnipro" target="_blank">Де ми знаходимось?</a>
+                </div>
+                <div class="footer-contact2">
+                <div class="social">
+                    <p class="social-media">Наші соцмережі:</p>
+                    <p>(тут також можна до нас звертатися)</p>
+                    <div class="img-social">
+                        <a href="#"><img src="./images/inst.png" alt="inst"></a>
+                        <a href="#"><img src="./images/tg.png" alt="tg"></a>
+                    </div>
+                </div>
+                </div>
             </div>
+        </div>
+           
             <div class="footer-links">
                 <div class="footer-column">
                     <a href="#">Каталог</a>
@@ -169,7 +230,6 @@
                     <a href="#">Кімнатні рослини</a>
                 </div>
             </div>
-        </div>
     </footer>
 
 </body>
