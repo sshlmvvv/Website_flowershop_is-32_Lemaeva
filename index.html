@@ -91,71 +91,9 @@
             <div class="main-container">
                 <h2 class="section-title">Спеціальні пропозиції</h2>
             </div>
-            <div class="cards-container">
-                <a href="#" class="card-container">
-                    <img class="card-img" src="./images/bouquet_1.png" alt="Малий букет">
-                    <div class="card">
-                        <p class="card-name">Малий букет</p>
-                        <p class="card-descr">Чарівний малий букет, який додасть ніжності у ваше життя.</p>
-                        <p class="card-price">1 600 грн</p>
-                    </div>
-                </a>
-                <a href="#" class="card-container">
-                    <img class="card-img" src="./images/bouquet_2.png" alt="Нобіліс">
-                    <div class="card">
-                        <p class="card-name">Нобіліс</p>
-                        <p class="card-descr">Справжня класика для особливих моментів.</p>
-                        <p class="card-price">99 грн</p>
-                    </div>
-                </a>
-                <a href="#" class="card-container">
-                    <img class="card-img" src="./images/bouquet_3.png" alt="Троянда Freedom 51 шт.">
-                    <div class="card">
-                        <p class="card-name">Троянда Freedom 51 шт.</p>
-                        <p class="card-descr">Елегантні троянди, які завжди в моді.<br><br></p>
-                        <p class="card-price">5 900 грн</p>
-                    </div>
-                </a>
-                <a href="#" class="card-container">
-                    <img class="card-img" src="./images/bouquet_4.png" alt="Малий букет">
-                    <div class="card">
-                        <p class="card-name">Малий букет</p>
-                        <p class="card-descr">Прекрасне поєднання квітів для кожного свята.</p>
-                        <p class="card-price">1 200 грн</p>
-                    </div>
-                </a>
-                <a href="#" class="card-container">
-                    <img class="card-img" src="./images/bouquet_2.png" alt="Букет 'Ранкова роса'">
-                    <div class="card">
-                        <p class="card-name">Букет "Ранкова роса"</p>
-                        <p class="card-descr">Свіжий та ніжний букет із рожевих півоній та білих лілій, що нагадує світанок.</p>
-                        <p class="card-price">2 300 грн</p>
-                    </div>
-                </a>
-                <a href="#" class="card-container">
-                    <img class="card-img" src="./images/bouquet_3.png" alt="Букет 'Захід сонця'">
-                    <div class="card">
-                        <p class="card-name">Букет "Захід сонця"</p>
-                        <p class="card-descr">Насичені відтінки помаранчевих троянд і червоних гербер, що передають тепло вечора.</p>
-                        <p class="card-price">3 100 грн</p>
-                    </div>
-                </a>
-                <a href="#" class="card-container">
-                    <img class="card-img" src="./images/bouquet_4.png" alt="Букет 'Літній вітерець'">
-                    <div class="card">
-                        <p class="card-name">Букет "Літній вітерець"</p>
-                        <p class="card-descr">Повітряна композиція з білих ромашок та блакитних ірисів, що дарує свіжість літа.</p>
-                        <p class="card-price">1 800 грн</p>
-                    </div>
-                </a>
-                <a href="#" class="card-container">
-                    <img class="card-img" src="./images/bouquet_2.png" alt="Букет 'Ніжні почуття'">
-                    <div class="card">
-                        <p class="card-name">Букет "Ніжні почуття"</p>
-                        <p class="card-descr">Композиція з білих півоній і рожевих троянд, що символізує чисті почуття.<br></p>
-                        <p class="card-price">2 700 грн</p>
-                    </div>
-                </a>
+            <div class="cards-container" id="bouquets-list">
+                <p style="text-align: center; width: 100%; font-size: 1.2rem; color: #ff2b67;">Завантажуємо букети з бази даних...
+                </p>
             </div>
         </section>
 
@@ -231,6 +169,39 @@
                 </div>
             </div>
     </footer>
+
+<script>
+    fetch('http://localhost:3000/api/bouquets')
+        .then(response => response.json())
+        .then(bouquets => {
+            const container = document.getElementById('bouquets-list');
+            container.innerHTML = '';
+
+            bouquets.forEach(bouquet => {
+                const categoryName = bouquet.Category ? bouquet.Category.name : 'БЕЗ КАТЕГОРІЇ';
+
+                const cardHtml = `
+                        <a href="#" class="card-container">
+                            <img class="card-img" src="${bouquet.imageUrl}" alt="${bouquet.name}">
+                            <div class="card">
+                                <p class="card-name">${bouquet.name}</p>
+                                <p class="card-descr">${bouquet.description}</p>
+                                <p class="card-price">${bouquet.price} грн</p>
+                                <!-- Виводимо безпечну змінну categoryName -->
+                                <p style="font-size: 11px; color: #ff2b67; margin-top: 8px; font-weight: bold; text-transform: uppercase;">
+                                    ${categoryName}
+                                </p>
+                            </div>
+                        </a>
+                    `;
+                container.innerHTML += cardHtml;
+            });
+        })
+        .catch(error => {
+            console.error('Помилка завантаження:', error);
+            document.getElementById('bouquets-list').innerHTML = '<p>Не вдалося завантажити букети з Бази Даних</p>';
+        });
+</script>
 
 </body>
 

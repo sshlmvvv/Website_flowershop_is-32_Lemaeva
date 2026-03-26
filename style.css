@@ -234,12 +234,16 @@ nav ul li a:hover {
 
 .card-container {
     width: 260px;
-    height: 380px;
+    min-height: 400px;
+    height: auto;
+    padding-bottom: 15px;
     border-radius: 15px;
     box-shadow: 0px 0px 12px 2px #ffa6c84f;
     color: #333333;
     transition: box-shadow 0.2s;
     text-decoration: none;
+    display: flex;
+    flex-direction: column;
 }
 
 .card-container:hover {
@@ -268,19 +272,21 @@ nav ul li a:hover {
 }
 
 .card-descr {
-    font-size: 11px;
-    font-weight: 400;
-    color: #4b4b4b;
-    margin: 0;
-    margin-bottom: 5px;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .card-price {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #89204a;
-    margin-top: 8px;
-    margin: 0;
+    font-size: 24px;
+    color: #7a1d3a;
+    font-weight: bold;
+    margin-top: auto;
 }
 
 * {
