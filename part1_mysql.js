@@ -42,7 +42,7 @@ async function runRawSql() {
     );
     console.log("Букет та Категорію додано в базу");*/
 
-    const [categoriesFromDb] = await connection.execute(
+    /*const [categoriesFromDb] = await connection.execute(
       `SELECT id FROM Categories WHERE name = 'Тюльпани'`,
     );
 
@@ -50,16 +50,15 @@ async function runRawSql() {
       const foundCategoryId = categoriesFromDb[0].id;
 
       await connection.execute(
-        `INSERT INTO Bouquets (name, description, price, imageUrl, CategoryId) VALUES ('Білі тюльпани 201шт.', 'Ніжні білі тюльпани для гарного настрою.', 55000, './images/bouquet_1.png', ?)`,
+        `INSERT INTO Bouquets (name, description, price, imageUrl, CategoryId) VALUES ('Червоні тюльпани 201шт.', 'Ніжні білі тюльпани для гарного настрою.', 55000, './images/bouquet_1.png', ?)`,
         [foundCategoryId],
       );
       console.log("Букет успішно додано в базу!");
     } else {
       console.log("Категорію не знайдено!");
-    }
+    }*/
 
-    /*
-    const [rows] = await connection.execute(`
+    /*const [rows] = await connection.execute(`
             SELECT Bouquets.name AS BouquetName, Bouquets.price, Categories.name AS CategoryName 
             FROM Bouquets 
             JOIN Categories ON Bouquets.CategoryId = Categories.id
@@ -68,14 +67,14 @@ async function runRawSql() {
     console.log(rows);*/
 
     /*await connection.execute(
-      `UPDATE Bouquets SET price = 500 WHERE name = 'Троянда Freedom 51 шт.'`,
+      `UPDATE Bouquets SET price = 90000 WHERE name = 'Червоні тюльпани 201шт.'`,
     );
-    console.log("Ціну букета оновлено на 500 грн");*/
+    console.log("Ціну букета оновлено на 90000 грн");*/
 
-    /*await connection.execute(
-      `DELETE FROM Bouquets WHERE name = 'Троянда Freedom 51 шт.'`,
+    await connection.execute(
+      `DELETE FROM Bouquets WHERE name = 'Червоні тюльпани 201шт.'`,
     );
-    console.log("Букет успішно видалено");*/
+    console.log("Букет успішно видалено");
   } catch (error) {
     console.error("Помилка бази даних:", error.message);
   } finally {

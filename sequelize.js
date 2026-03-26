@@ -10,7 +10,6 @@ async function showSequelizeMagic() {
     await sequelize.authenticate();
     console.log("Успішно підключено!");
 
-    console.log("\nCREATE");
     const rosesCategory = await Category.findOne({
       where: { name: "Тюльпани" },
     });
@@ -23,9 +22,9 @@ async function showSequelizeMagic() {
     }
 
     /*const newBouquet = await Bouquet.create({
-      name: "Величезна Корзина Троянд",
-      description: "Дуже велика корзина 501шт.",
-      price: 35000,
+      name: "Величезна Корзина Тюльпанів",
+      description: "Дуже велика корзина 201шт.",
+      price: 25000,
       imageUrl: "./images/bouquet_3.png",
       CategoryId: categoryId,
     });
@@ -33,14 +32,14 @@ async function showSequelizeMagic() {
 
     console.log("\nREAD");
     const foundBouquet = await Bouquet.findOne({
-      where: { name: "Білі тюльпани 201шт." },
+      where: { name: "Величезна Корзина Тюльпанів" },
     });
 
     if (foundBouquet) {
       console.log(`${foundBouquet.name}`);
 
       console.log("\nUPDATE");
-      foundBouquet.price = 40000;
+      foundBouquet.price = 10000;
       await foundBouquet.save();
       console.log(` ${foundBouquet.price} грн`);
 
