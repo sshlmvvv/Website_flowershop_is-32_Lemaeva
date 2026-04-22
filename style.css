@@ -29,7 +29,7 @@ header {
     font-size: 2.1rem;
     color: #ff2b67;
     text-decoration: none;
-    padding: 0 20px ;
+    padding: 0 20px;
     white-space: nowrap;
     max-width: 100%;
     overflow: hidden;
@@ -65,7 +65,7 @@ header {
     margin-left: 20px;
 }
 
-.working-hours{
+.working-hours {
     white-space: nowrap;
     max-width: 100%;
 }
@@ -206,7 +206,7 @@ nav ul li a:hover {
 }
 
 .special-offers {
-    text-align: center;  
+    text-align: center;
 }
 
 .special-offers h2 {
@@ -482,7 +482,6 @@ nav ul li a:hover {
     text-decoration: underline;
 }
 
-
 .social p {
     display: block;
     text-decoration: none;
@@ -625,26 +624,26 @@ nav ul li a:hover {
     }
 
     .aboutus-section {
-            display: flex;
-            gap: 10px;
-            flex-direction: column;
-        }
-    
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+    }
+
     .image-text-block1 {
-            text-align: left;
-            flex-direction: column;
-            display: flex;
-            flex-wrap: nowrap;
-            align-items: center;
-        }
-    
+        text-align: left;
+        flex-direction: column;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
     .image-text-block2 {
-            text-align: left;
-            flex-direction: column;
-            display: flex;
-            flex-wrap: nowrap;
-            align-items: center;
-        }
+        text-align: left;
+        flex-direction: column;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
 
     .footer {
         flex-direction: column;
@@ -726,6 +725,7 @@ nav ul li a:hover {
     .logo-footer a {
         font-size: 2.2rem;
     }
+
     .promo-section {
         height: auto;
     }
@@ -744,6 +744,7 @@ nav ul li a:hover {
     .promo-content p {
         font-size: 2rem;
     }
+
     .filters {
         flex-direction: column;
         gap: 10px;
@@ -755,26 +756,26 @@ nav ul li a:hover {
     }
 
     .aboutus-section {
-            display: flex;
-            gap: 10px;
-            flex-direction: column;
-        }
-    
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+    }
+
     .image-text-block1 {
-            text-align: left;
-            flex-direction: column;
-            display: flex;
-            flex-wrap: nowrap;
-            align-items: center;
-        }
-    
+        text-align: left;
+        flex-direction: column;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
     .image-text-block2 {
-            text-align: left;
-            flex-direction: column;
-            display: flex;
-            flex-wrap: nowrap;
-            align-items: center;
-        }
+        text-align: left;
+        flex-direction: column;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
 
     .footer-contact {
         flex-direction: row;
@@ -818,5 +819,176 @@ nav ul li a:hover {
 
     .footer-logo {
         margin-left: 50px;
+    }
+}
+
+/* =========================================
+   НОВІ СТИЛІ ДЛЯ АВТОРИЗАЦІЇ ТА ПРОФІЛЮ 
+   ========================================= */
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.auth-btn {
+    background: #ff2b67;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+}
+
+.auth-btn:hover {
+    background: #d91c52;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #666;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+/* --------------------------------------
+   БЛОК З ОКОМ (ПРАВИЛЬНЕ РОЗТАШУВАННЯ) 
+   -------------------------------------- */
+.password-container {
+    position: relative !important;
+    width: 100% !important;
+    margin: 10px 0 !important;
+    display: block !important;
+}
+
+.password-container input {
+    width: 100% !important;
+    margin: 0 !important;
+    padding-right: 40px !important;
+    box-sizing: border-box !important;
+}
+
+.toggle-password {
+    position: absolute !important;
+    right: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    cursor: pointer !important;
+    color: #888 !important;
+    font-size: 16px !important;
+    z-index: 10 !important;
+}
+
+.modal input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.modal button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background: #ff2b67;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 10px;
+}
+
+.modal button:hover {
+    background: #d91c52;
+}
+
+#auth-error {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 10px;
+    display: none;
+}
+
+#profileModal .modal-content {
+    width: 350px;
+}
+
+.profile-info {
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+
+.profile-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.profile-info strong {
+    color: #ff2b67;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.danger-btn {
+    background: #ff4d4d !important;
+}
+
+.hidden-form {
+    display: none;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+@media (max-width: 576px) {
+    .auth-buttons {
+        margin-left: 0;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 }
