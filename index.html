@@ -13,6 +13,90 @@
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>FLORAL & BLOSSOM - доставка квітів у Дніпрі</title>
+
+    <style>
+        .hidden-file-input {
+            display: none;
+        }
+
+        .custom-file-label {
+            display: inline-block;
+            background: #89204a;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .custom-file-label:hover {
+            background: #5c1430;
+        }
+
+        .file-name-display {
+            display: block;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .preview-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .preview-file-box {
+            text-align: center;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            min-width: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .preview-file-box img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+
+        .preview-file-box i {
+            font-size: 45px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .preview-file-box a {
+            font-size: 11px;
+            color: #ff2b67;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+            background: #fff0f5;
+            padding: 4px 8px;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .preview-file-box a:hover {
+            background: #ff2b67;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -188,6 +272,69 @@
             </div>
         </section>
 
+        <section class="lab-tasks"
+            style="padding: 50px 20px; background: #fff0f5; text-align: center; border-top: 2px solid #ff2b67;">
+            <div class="container">
+                <h2
+                    style="color: #89204a; font-family: 'Montserrat'; font-weight: 700; font-size: 24px; margin-bottom: 10px;">
+                    Створіть свій унікальний букет
+                </h2>
+                <p style="margin-bottom: 30px; font-size: 14px; color: #555;">
+                    Не знайшли потрібний варіант у каталозі? Завантажте фото букета, який бажаєте отримати, і наші
+                    флористи зберуть його для вас!
+                </p>
+
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+
+                    <div
+                        style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 320px; text-align: left;">
+                        <h3 style="color: #333; margin-bottom: 15px; font-size: 18px; text-align: center;">Одне фото</h3>
+                        <form id="singleUploadForm">
+                            <input type="file" name="file" id="singleFile" required class="hidden-file-input"
+                                accept=".jpg,.jpeg,.png,.pdf">
+                            <label for="singleFile" class="custom-file-label"><i class="fas fa-paperclip"></i> Оберіть
+                                файл</label>
+                            <span id="singleFileName" class="file-name-display">Файл не обрано</span>
+
+                            <button type="submit" class="auth-btn" style="width: 100%;">Завантажити на сервер</button>
+                        </form>
+
+                        <div id="singleRes" style="margin-top: 15px; display: none;"></div>
+                    </div>
+
+                    <div
+                        style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 320px; text-align: left;">
+                        <h3 style="color: #333; margin-bottom: 15px; font-size: 18px; text-align: center;">Декілька
+                            варіантів фото</h3>
+                        <p
+                            style="font-size: 11px; color: #888; text-align: center; margin-top: -10px; margin-bottom: 15px;">
+                            (до 5 фотографій)</p>
+                        <form id="multiUploadForm">
+                            <input type="file" name="files" id="multiFiles" multiple required class="hidden-file-input"
+                                accept=".jpg,.jpeg,.png,.pdf">
+                            <label for="multiFiles" class="custom-file-label"><i class="fas fa-images"></i> Оберіть
+                                файли</label>
+                            <span id="multiFileName" class="file-name-display">Файли не обрано</span>
+
+                            <button type="submit" class="auth-btn" style="width: 100%;">Завантажити варіанти</button>
+                        </form>
+
+                        <div id="multiRes" style="margin-top: 15px; display: none;"></div>
+                    </div>
+
+                    <div
+                        style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 320px; text-align: center;">
+                        <h3 style="color: #333; margin-bottom: 15px; font-size: 18px;">Технічний статус сервера</h3>
+                        <button onclick="checkServerStatus()" class="auth-btn" style="background: #333; width: 100%;"><i
+                                class="fas fa-server"></i> Перевірити стан</button>
+                        <pre id="statusRes"
+                            style="margin-top: 15px; text-align: left; font-size: 11px; background: #f4f4f4; padding: 10px; border-radius: 5px; white-space: pre-wrap; overflow-x: auto; display: none;"></pre>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="footer">
@@ -202,6 +349,7 @@
     </footer>
 
     <script>
+        
         fetch('http://localhost:3000/api/bouquets')
             .then(response => response.json())
             .then(bouquets => {
@@ -247,13 +395,10 @@
         function closeModal() {
             document.getElementById('authModal').style.display = 'none';
             document.getElementById('auth-error').style.display = 'none';
-
             document.getElementById('auth-form').style.display = 'block';
             document.getElementById('toggle-auth').style.display = 'block';
             document.getElementById('verify-email-section').style.display = 'none';
-
             document.getElementById('auth-form').reset();
-
             document.querySelectorAll('.toggle-password').forEach(icon => {
                 icon.classList.remove("fa-eye-slash");
                 icon.classList.add("fa-eye");
@@ -272,7 +417,6 @@
             document.getElementById('modal-title').innerText = isLoginMode ? 'Вхід' : 'Реєстрація';
             document.getElementById('submit-btn').innerText = isLoginMode ? 'Увійти' : 'Зареєструватись';
             document.getElementById('toggle-auth').innerText = isLoginMode ? 'Немає акаунту? Зареєструватись' : 'Вже є акаунт? Увійти';
-
             document.getElementById('confirm-password-container').style.display = isLoginMode ? 'none' : 'block';
 
             if (isLoginMode) {
@@ -315,7 +459,6 @@
                         document.getElementById('auth-form').style.display = 'none';
                         document.getElementById('toggle-auth').style.display = 'none';
                         document.getElementById('modal-title').innerText = 'Перевірка пошти';
-
                         const verifySection = document.getElementById('verify-email-section');
                         verifySection.style.display = 'block';
                         verifySection.dataset.userid = data.userId;
@@ -329,7 +472,6 @@
 
         async function simulateEmailVerification() {
             const userId = document.getElementById('verify-email-section').dataset.userid;
-
             try {
                 const response = await fetch('http://localhost:3000/api/auth/verify-email', {
                     method: 'POST',
@@ -437,14 +579,6 @@
             document.getElementById('profileModal').style.display = 'none';
             document.getElementById('edit-profile-form').style.display = 'none';
             document.getElementById('change-password-form').style.display = 'none';
-
-            document.querySelectorAll('.toggle-password').forEach(icon => {
-                icon.classList.remove("fa-eye-slash");
-                icon.classList.add("fa-eye");
-            });
-            document.querySelectorAll('input[type="text"]').forEach(input => {
-                if (input.id.includes("password")) input.type = "password";
-            });
         }
 
         function toggleEditProfile() {
@@ -490,30 +624,18 @@
             if (res.ok) {
                 alert(data.message);
                 document.getElementById('change-password-form').style.display = 'none';
-                document.getElementById('old-password').value = "";
-                document.getElementById('new-password').value = "";
             }
             else alert(data.error);
         }
 
         async function deleteAccount() {
             if (!confirm("Ви впевнені, що хочете назавжди видалити свій акаунт? Цю дію неможливо скасувати.")) return;
-
             try {
                 const res = await fetch('http://localhost:3000/api/auth/profile', {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
-
-                const rawText = await res.text();
-                let data;
-                try {
-                    data = JSON.parse(rawText);
-                } catch (e) {
-                    alert("Сервер повернув неочікувану відповідь (не JSON). Переконайтесь, що сервер перезапущено!");
-                    return;
-                }
-
+                const data = await res.json();
                 if (res.ok) {
                     alert(data.message);
                     closeProfileModal();
@@ -528,6 +650,135 @@
         }
 
         checkAuthStatus();
+
+        function getFilePreviewHtml(file) {
+            const filePath = file.path.replace(/\\/g, '/');
+
+            if (file.mimetype && file.mimetype.startsWith('image/')) {
+                return `
+                <div class="preview-file-box">
+                    <img src="/${filePath}" alt="Завантажене фото">
+                    <a href="/${filePath}" target="_blank">Відкрити фото</a>
+                </div>`;
+            } else if (file.mimetype === 'application/pdf') {
+                return `
+                <div class="preview-file-box">
+                    <i class="fas fa-file-pdf" style="color: #d93025;"></i>
+                    <a href="/${filePath}" target="_blank">Відкрити ескіз</a>
+                </div>`;
+            } else {
+                return `
+                <div class="preview-file-box">
+                    <i class="fas fa-file" style="color: #666;"></i>
+                    <a href="/${filePath}" target="_blank">Відкрити файл</a>
+                </div>`;
+            }
+        }
+
+        document.getElementById('singleFile').addEventListener('change', function (e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : "Файл не обрано";
+            document.getElementById('singleFileName').innerText = fileName;
+        });
+
+        document.getElementById('multiFiles').addEventListener('change', function (e) {
+            const count = e.target.files.length;
+            const text = count > 0 ? `Обрано файлів: ${count}` : "Файли не обрано";
+            document.getElementById('multiFileName').innerText = text;
+        });
+
+        document.getElementById('singleUploadForm').onsubmit = async (e) => {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('singleFile');
+            if (fileInput.files.length === 0) return;
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const resBox = document.getElementById('singleRes');
+            resBox.style.display = 'block';
+            resBox.innerHTML = "<p style='color: #666;'>Завантаження...</p>";
+
+            try {
+                const res = await fetch('http://localhost:3000/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    const previewCard = getFilePreviewHtml(data.file);
+                    resBox.innerHTML = `
+                        <p style="color: #28a745; font-weight: bold; margin-bottom: 10px;">Дякуємо! Фото букета успішно отримано.</p>
+                        <div class="preview-gallery" style="justify-content: center;">
+                            ${previewCard}
+                        </div>
+                    `;
+                } else {
+                    resBox.innerHTML = `<p style="color: red;">Помилка: ${data.error}</p>`;
+                }
+            } catch (err) {
+                resBox.innerHTML = `<p style="color: red;">Помилка зв'язку з сервером.</p>`;
+            }
+        };
+
+        document.getElementById('multiUploadForm').onsubmit = async (e) => {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('multiFiles');
+            if (fileInput.files.length === 0) return;
+
+            const formData = new FormData();
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append('files', fileInput.files[i]);
+            }
+
+            const resBox = document.getElementById('multiRes');
+            resBox.style.display = 'block';
+            resBox.innerHTML = "<p style='color: #666;'>Завантаження...</p>";
+
+            try {
+                const res = await fetch('http://localhost:3000/upload-multiple', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    let html = `<p style="color: #28a745; font-weight: bold;">Дякуємо! Ваші варіанти букетів успішно отримано.</p>`;
+                    html += `<div class="preview-gallery">`;
+                    data.files.forEach(file => { html += getFilePreviewHtml(file); });
+                    html += `</div>`;
+                    resBox.innerHTML = html;
+                } else {
+                    resBox.innerHTML = `<p style="color: red;">Помилка: ${data.error}</p>`;
+                }
+            } catch (err) {
+                resBox.innerHTML = `<p style="color: red;">Помилка зв'язку з сервером.</p>`;
+            }
+        };
+
+        async function checkServerStatus() {
+            const resBox = document.getElementById('statusRes');
+            resBox.style.display = 'block';
+            resBox.innerText = "Завантаження даних...";
+
+            try {
+                const res = await fetch('http://localhost:3000/status');
+                const data = await res.json();
+
+                const memoryMb = Math.round(data.memoryUsage.rss / 1024 / 1024);
+                const uptimeMin = Math.round(data.uptime / 60);
+
+                resBox.innerHTML = `
+                    <p><strong>Час роботи:</strong> ${uptimeMin} хв (${Math.round(data.uptime)} сек)</p>
+                    <p><strong>Використання пам'яті:</strong> ~ ${memoryMb} MB</p>
+                    <p style="font-size: 9px; color: #999; margin-top: 10px;">${new Date().toLocaleString()}</p>
+                `;
+            } catch (err) {
+                resBox.innerText = "Помилка зв'язку з сервером.";
+            }
+        }
     </script>
 </body>
 
