@@ -1,0 +1,16 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 30
+      arrivalRate: 10
+      name: "Навантаження: Середній рівень"
+  
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Перегляд списку букетів користувачем"
+    flow:
+      - get:
+          url: "/api/bouquets"

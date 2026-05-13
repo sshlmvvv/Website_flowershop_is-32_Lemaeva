@@ -3,6 +3,11 @@ const path = require("path");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const { body, validationResult } = require("express-validator");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
+const redis = require("redis");
 
 const morgan = require("morgan");
 const winston = require("winston");
@@ -18,6 +23,117 @@ const app = express();
 const PORT = 3000;
 const SECRET_KEY = "super_secret_floral_key_123";
 const REFRESH_SECRET_KEY = "super_refresh_floral_key_123";
+
+const redisClient = redis.createClient({
+  url: `redis://${process.env.REDIS_HOST || "localhost"}:6379`,
+});
+redisClient.on("error", (err) => console.error("Помилка Redis клієнта:", err));
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Flower Shop API",
+      version: "1.0.0",
+      description: "API документація для магазину квітів (Лабораторна робота)",
+      contact: {
+        name: "Lemaeva",
+      },
+    },
+    servers: [
+      {
+        url: "http://localhost:3000",
+        description: "Локальний сервер",
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    paths: {
+      "/api/auth/register": {
+        post: {
+          summary: "Реєстрація нового користувача",
+          tags: ["Auth"],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["email", "password", "confirmPassword"],
+                  properties: {
+                    email: { type: "string", example: "user@example.com" },
+                    password: { type: "string", example: "Password123" },
+                    confirmPassword: { type: "string", example: "Password123" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            201: { description: "Реєстрація успішна" },
+            400: { description: "Помилка валідації" },
+          },
+        },
+      },
+      "/api/auth/login": {
+        post: {
+          summary: "Вхід в систему (Логін)",
+          tags: ["Auth"],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["email", "password"],
+                  properties: {
+                    email: { type: "string", example: "user@example.com" },
+                    password: { type: "string", example: "Password123" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: { description: "Вхід успішний, повертає токен" },
+            400: { description: "Невірні дані" },
+          },
+        },
+      },
+      "/api/auth/profile": {
+        get: {
+          summary: "Отримати профіль користувача",
+          tags: ["Auth"],
+          security: [{ bearerAuth: [] }],
+          responses: {
+            200: { description: "Дані профілю" },
+            401: { description: "Не авторизовано" },
+          },
+        },
+      },
+      "/api/bouquets": {
+        get: {
+          summary: "Отримати список всіх букетів (З КЕШУВАННЯМ REDIS)",
+          tags: ["Bouquets"],
+          responses: {
+            200: { description: "Список букетів з категоріями" },
+          },
+        },
+      },
+    },
+  },
+  apis: [],
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 const logger = winston.createLogger({
   level: "info",
@@ -69,9 +185,14 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
+
 app.use(express.json());
 app.use(express.static(__dirname));
-
 app.use(morgan("dev"));
 
 app.use((req, res, next) => {
@@ -83,14 +204,23 @@ app.use((req, res, next) => {
   next();
 });
 
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: {
+    error: "Забагато запитів з вашого IP, будь ласка, спробуйте пізніше.",
+  },
+});
+app.use("/api/", apiLimiter);
+
 const loginLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
   max: 10,
   message: { error: "Забагато спроб входу. Зачекайте 1 хвилину." },
 });
 
-Category.hasMany(Bouquet);
-Bouquet.belongsTo(Category);
+Category.hasMany(Bouquet, { foreignKey: "CategoryId" });
+Bouquet.belongsTo(Category, { foreignKey: "CategoryId" });
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -104,6 +234,7 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
 
 app.get("/status", (req, res) => {
   res.json({
@@ -132,89 +263,115 @@ app.post("/upload-multiple", upload.array("files", 5), (req, res) => {
   res.json({ message: "Файли завантажено успішно", files: req.files });
 });
 
-app.post("/api/auth/register", async (req, res, next) => {
-  try {
-    const { email, password, confirmPassword } = req.body;
+app.post(
+  "/api/auth/register",
+  [
+    body("email").isEmail().withMessage("Некоректний формат email"),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Пароль має містити мін. 6 символів.")
+      .matches(/^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/)
+      .withMessage("Пароль має містити 1 велику літеру(латиниця) та 1 цифру."),
+    body("confirmPassword").custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Паролі не співпадають");
+      }
+      return true;
+    }),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        const errMessages = errors
+          .array()
+          .map((e) => e.msg)
+          .join(", ");
+        const err = new Error(errMessages);
+        err.status = 400;
+        return next(err);
+      }
 
-    if (!email || !password || !confirmPassword) {
-      const err = new Error("Всі поля обов'язкові");
-      err.status = 400;
-      return next(err);
+      const { email, password } = req.body;
+
+      const existingUser = await User.findOne({ where: { email } });
+      if (existingUser) {
+        const err = new Error("Користувач вже існує");
+        err.status = 400;
+        return next(err);
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = await User.create({ email, password: hashedPassword });
+
+      logger.info(`Користувач зареєструвався: ${email}`);
+
+      res.status(201).json({
+        message: "Реєстрація успішна!",
+        userId: newUser.id,
+      });
+    } catch (error) {
+      next(error);
     }
+  },
+);
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
-    if (!passwordRegex.test(password)) {
-      const err = new Error(
-        "Пароль має містити мін. 6 символів, 1 велику літеру та 1 цифру.",
+app.post(
+  "/api/auth/login",
+  loginLimiter,
+  [
+    body("email").isEmail().withMessage("Некоректний формат email"),
+    body("password").notEmpty().withMessage("Пароль є обов'язковим"),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        const errMessages = errors
+          .array()
+          .map((e) => e.msg)
+          .join(", ");
+        const err = new Error(errMessages);
+        err.status = 400;
+        return next(err);
+      }
+
+      const { email, password } = req.body;
+      const user = await User.findOne({ where: { email } });
+
+      if (!user || !user.password) {
+        const err = new Error("Користувача не знайдено.");
+        err.status = 400;
+        return next(err);
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        const err = new Error("Невірний пароль");
+        err.status = 400;
+        return next(err);
+      }
+
+      const accessToken = jwt.sign(
+        { id: user.id, email: user.email, role: user.role },
+        SECRET_KEY,
+        { expiresIn: "15m" },
       );
-      err.status = 400;
-      return next(err);
+      const refreshToken = jwt.sign({ id: user.id }, REFRESH_SECRET_KEY, {
+        expiresIn: "7d",
+      });
+
+      user.refreshToken = refreshToken;
+      await user.save();
+
+      logger.info(`Вхід користувача: ${email}`);
+
+      res.json({ message: "Вхід успішний", accessToken });
+    } catch (error) {
+      next(error);
     }
-
-    if (password !== confirmPassword) {
-      const err = new Error("Паролі не співпадають");
-      err.status = 400;
-      return next(err);
-    }
-
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      const err = new Error("Користувач вже існує");
-      err.status = 400;
-      return next(err);
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ email, password: hashedPassword });
-
-    logger.info(`Користувач зареєструвався: ${email}`);
-
-    res.status(201).json({
-      message: "Реєстрація успішна!",
-      userId: newUser.id,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-app.post("/api/auth/login", loginLimiter, async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ where: { email } });
-
-    if (!user || !user.password) {
-      const err = new Error("Користувача не знайдено.");
-      err.status = 400;
-      return next(err);
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      const err = new Error("Невірний пароль");
-      err.status = 400;
-      return next(err);
-    }
-
-    const accessToken = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
-      SECRET_KEY,
-      { expiresIn: "15m" },
-    );
-    const refreshToken = jwt.sign({ id: user.id }, REFRESH_SECRET_KEY, {
-      expiresIn: "7d",
-    });
-
-    user.refreshToken = refreshToken;
-    await user.save();
-
-    logger.info(`Вхід користувача: ${email}`);
-
-    res.json({ message: "Вхід успішний", accessToken });
-  } catch (error) {
-    next(error);
-  }
-});
+  },
+);
 
 app.post("/api/auth/verify-email", async (req, res, next) => {
   try {
@@ -300,44 +457,63 @@ app.get("/api/auth/profile", authenticateToken, async (req, res, next) => {
   }
 });
 
-app.put("/api/auth/profile", authenticateToken, async (req, res, next) => {
-  try {
-    const { email } = req.body;
-    const user = await User.findByPk(req.user.id);
-    if (!user)
-      return res.status(404).json({ error: "Користувача не знайдено" });
+app.put(
+  "/api/auth/profile",
+  authenticateToken,
+  [body("email").optional().isEmail().withMessage("Некоректний формат email")],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        const err = new Error(errors.array()[0].msg);
+        err.status = 400;
+        return next(err);
+      }
 
-    if (email) user.email = email;
-    await user.save();
-    res.json({
-      message: "Email успішно оновлено!",
-      user: { email: user.email },
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+      const { email } = req.body;
+      const user = await User.findByPk(req.user.id);
+      if (!user)
+        return res.status(404).json({ error: "Користувача не знайдено" });
+
+      if (email) user.email = email;
+      await user.save();
+      res.json({
+        message: "Email успішно оновлено!",
+        user: { email: user.email },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 app.put(
   "/api/auth/change-password",
   authenticateToken,
+  [
+    body("newPassword")
+      .isLength({ min: 6 })
+      .withMessage("Новий пароль має містити мін. 6 символів.")
+      .matches(/^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/)
+      .withMessage(
+        "Новий пароль має містити 1 велику літеру(латиниця) та 1 цифру.",
+      ),
+  ],
   async (req, res, next) => {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        const err = new Error(errors.array()[0].msg);
+        err.status = 400;
+        return next(err);
+      }
+
       const { oldPassword, newPassword } = req.body;
       const user = await User.findByPk(req.user.id);
 
       const isMatch = await bcrypt.compare(oldPassword, user.password);
       if (!isMatch) {
         const err = new Error("Невірний поточний пароль");
-        err.status = 400;
-        return next(err);
-      }
-
-      const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
-      if (!passwordRegex.test(newPassword)) {
-        const err = new Error(
-          "Новий пароль має містити мін. 6 символів, 1 велику літеру(латиниця) та 1 цифру.",
-        );
         err.status = 400;
         return next(err);
       }
@@ -368,8 +544,22 @@ app.delete("/api/auth/profile", authenticateToken, async (req, res, next) => {
 });
 
 app.get("/api/bouquets", async (req, res, next) => {
+  const CACHE_KEY = "bouquets_list";
   try {
+    const cachedData = await redisClient.get(CACHE_KEY);
+
+    if (cachedData) {
+      console.log("--- [REDIS] ДАНІ ВЗЯТО З КЕШУ ---");
+      return res.json(JSON.parse(cachedData));
+    }
+
+    console.log("--- [MySQL] КЕШ ПОРОЖНІЙ, ЗАПИТ ДО БД ---");
     const bouquets = await Bouquet.findAll({ include: Category });
+
+    await redisClient.set(CACHE_KEY, JSON.stringify(bouquets), {
+      EX: 60,
+    });
+
     res.json(bouquets);
   } catch (error) {
     next(error);
@@ -386,10 +576,16 @@ app.use((err, req, res, next) => {
 
 async function startServer() {
   try {
+    await redisClient.connect();
+    console.log("Успішно підключено до Redis.");
+
     await sequelize.sync({ alter: true });
     logger.info("База даних синхронізована.");
     app.listen(PORT, () => {
       console.log(`Сервер успішно запущено: http://localhost:${PORT}`);
+      console.log(
+        `Swagger документація доступна за адресою: http://localhost:${PORT}/api-docs`,
+      );
     });
   } catch (error) {
     console.error("КРИТИЧНА ПОМИЛКА ПРИ ЗАПУСКУ СЕРВЕРА:");
