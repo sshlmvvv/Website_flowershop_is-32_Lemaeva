@@ -20,7 +20,7 @@ const Bouquet = require("./models/Bouquet");
 const User = require("./models/User");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const SECRET_KEY = "super_secret_floral_key_123";
 const REFRESH_SECRET_KEY = "super_refresh_floral_key_123";
 
@@ -35,7 +35,8 @@ const swaggerOptions = {
     info: {
       title: "Flower Shop API",
       version: "1.0.0",
-      description: "API документація для магазину квітів (Лабораторна робота)",
+      description:
+        "API документація для магазину квітів",
       contact: {
         name: "Lemaeva",
       },
@@ -45,6 +46,10 @@ const swaggerOptions = {
         url: "http://localhost:3000",
         description: "Локальний сервер",
       },
+      {
+        url: "https://your-app-name.onrender.com",
+        description: "Хмарний сервер Render",
+      },
     ],
     components: {
       securitySchemes: {
@@ -52,6 +57,29 @@ const swaggerOptions = {
           type: "http",
           scheme: "bearer",
           bearerFormat: "JWT",
+        },
+      },
+      schemas: {
+        Bouquet: {
+          type: "object",
+          properties: {
+            id: { type: "integer", example: 1 },
+            name: { type: "string", example: "Розкішні Півонії" },
+            description: {
+              type: "string",
+              example: "Свіжі квіти з Нідерландів.",
+            },
+            price: { type: "integer", example: 4500 },
+            imageUrl: { type: "string", example: "./images/bouquet_5.png" },
+            CategoryId: { type: "integer", example: 1 },
+          },
+        },
+        Category: {
+          type: "object",
+          properties: {
+            id: { type: "integer", example: 1 },
+            name: { type: "string", example: "Тюльпани" },
+          },
         },
       },
     },
@@ -68,7 +96,7 @@ const swaggerOptions = {
                   type: "object",
                   required: ["email", "password", "confirmPassword"],
                   properties: {
-                    email: { type: "string", example: "user@example.com" },
+                    email: { type: "string", example: "admin@flowers.com" },
                     password: { type: "string", example: "Password123" },
                     confirmPassword: { type: "string", example: "Password123" },
                   },
@@ -94,7 +122,7 @@ const swaggerOptions = {
                   type: "object",
                   required: ["email", "password"],
                   properties: {
-                    email: { type: "string", example: "user@example.com" },
+                    email: { type: "string", example: "admin@flowers.com" },
                     password: { type: "string", example: "Password123" },
                   },
                 },
@@ -125,6 +153,90 @@ const swaggerOptions = {
           responses: {
             200: { description: "Список букетів з категоріями" },
           },
+        },
+        post: {
+          summary: "Створити новий букет (Тільки Адмін)",
+          tags: ["Admin: CRUD"],
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Bouquet" },
+              },
+            },
+          },
+          responses: {
+            201: { description: "Створено" },
+            403: { description: "Доступ заборонено" },
+          },
+        },
+      },
+      "/api/bouquets/{id}": {
+        put: {
+          summary: "Редагувати букет (Тільки Адмін)",
+          tags: ["Admin: CRUD"],
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              in: "path",
+              name: "id",
+              required: true,
+              schema: { type: "integer" },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: { price: { type: "integer", example: 4000 } },
+                },
+              },
+            },
+          },
+          responses: { 200: { description: "Оновлено успішно" } },
+        },
+        delete: {
+          summary: "Видалити букет (Тільки Адмін)",
+          tags: ["Admin: CRUD"],
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              in: "path",
+              name: "id",
+              required: true,
+              schema: { type: "integer" },
+            },
+          ],
+          responses: { 200: { description: "Видалено успішно" } },
+        },
+      },
+      "/api/categories": {
+        get: {
+          summary: "Отримати всі категорії",
+          tags: ["Public API"],
+          responses: { 200: { description: "Список категорій" } },
+        },
+        post: {
+          summary: "Додати категорію (Тільки Адмін)",
+          tags: ["Admin: CRUD"],
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    name: { type: "string", example: "Екзотичні рослини" },
+                  },
+                },
+              },
+            },
+          },
+          responses: { 201: { description: "Створено" } },
         },
       },
     },
@@ -235,6 +347,15 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+const isAdmin = (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    next();
+  } else {
+    res
+      .status(403)
+      .json({ error: "Доступ заборонено! Потрібні права адміністратора." });
+  }
+};
 
 app.get("/status", (req, res) => {
   res.json({
@@ -301,14 +422,24 @@ app.post(
         return next(err);
       }
 
+      let role = "user";
+      if (email.toLowerCase().includes("admin")) {
+        role = "admin";
+      }
+
       const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = await User.create({ email, password: hashedPassword });
+      const newUser = await User.create({
+        email,
+        password: hashedPassword,
+        role,
+      });
 
       logger.info(`Користувач зареєструвався: ${email}`);
 
       res.status(201).json({
         message: "Реєстрація успішна!",
         userId: newUser.id,
+        role: newUser.role,
       });
     } catch (error) {
       next(error);
@@ -565,6 +696,85 @@ app.get("/api/bouquets", async (req, res, next) => {
     next(error);
   }
 });
+
+app.post(
+  "/api/bouquets",
+  authenticateToken,
+  isAdmin,
+  async (req, res, next) => {
+    try {
+      const newBouquet = await Bouquet.create(req.body);
+      await redisClient.del("bouquets_list"); 
+      res
+        .status(201)
+        .json({ message: "Букет успішно додано", bouquet: newBouquet });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+app.put(
+  "/api/bouquets/:id",
+  authenticateToken,
+  isAdmin,
+  async (req, res, next) => {
+    try {
+      const bouquet = await Bouquet.findByPk(req.params.id);
+      if (!bouquet) return res.status(404).json({ error: "Букет не знайдено" });
+
+      await bouquet.update(req.body);
+      await redisClient.del("bouquets_list"); 
+      res.json({ message: "Букет успішно оновлено", bouquet });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+app.delete(
+  "/api/bouquets/:id",
+  authenticateToken,
+  isAdmin,
+  async (req, res, next) => {
+    try {
+      const bouquet = await Bouquet.findByPk(req.params.id);
+      if (!bouquet) return res.status(404).json({ error: "Букет не знайдено" });
+
+      await bouquet.destroy();
+      await redisClient.del("bouquets_list"); 
+      res.json({ message: "Букет успішно видалено" });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+
+app.get("/api/categories", async (req, res, next) => {
+  try {
+    const categories = await Category.findAll();
+    res.json(categories);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post(
+  "/api/categories",
+  authenticateToken,
+  isAdmin,
+  async (req, res, next) => {
+    try {
+      const newCategory = await Category.create(req.body);
+      res
+        .status(201)
+        .json({ message: "Категорія створена", category: newCategory });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 app.use((err, req, res, next) => {
   logger.error(`Помилка: ${err.message}`);
